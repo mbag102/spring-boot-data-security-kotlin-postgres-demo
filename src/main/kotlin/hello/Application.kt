@@ -18,38 +18,18 @@ open class Application {
 		= Jackson2ObjectMapperBuilder().modulesToInstall(KotlinModule())
 
 	@Bean
-	open fun init(repository: CustomerRepository) = CommandLineRunner {
-			// save a couple of customers
-			repository.save(Customer("Jack", "Bauer"))
-			repository.save(Customer("Chloe", "O'Brian"))
-			repository.save(Customer("Kim", "Bauer"))
-			repository.save(Customer("David", "Palmer"))
-			repository.save(Customer("Michelle", "Dessler"))
+	open fun init(customerRepository: CustomerRepository, roleRepository: RoleRepository, userRepository: UserRepository) = CommandLineRunner {
+		// save a couple of customers
+		customerRepository.save(Customer("Jack", "Bauer"))
+		customerRepository.save(Customer("Chloe", "O'Brian"))
+		customerRepository.save(Customer("Kim", "Bauer"))
+		customerRepository.save(Customer("David", "Palmer"))
+		customerRepository.save(Customer("Michelle", "Dessler"))
 
-			// fetch all customers
-			log.info("Customers found with findAll():")
-			log.info("-------------------------------")
-			for (customer in repository.findAll()) {
-				log.info(customer.toString())
-			}
-			log.info("")
-
-			// fetch an individual customer by ID
-			val customer = repository.findOne(1L)
-			log.info("Customer found with findOne(1L):")
-			log.info("--------------------------------")
-			log.info(customer.toString())
-			log.info("")
-
-			// fetch customers by last name
-			log.info("Customer found with findByLastName('Bauer'):")
-			log.info("--------------------------------------------")
-			for (bauer in repository.findByLastName("Bauer")) {
-				log.info(bauer.toString())
-			}
-			log.info("")
+		//Rely on cascade to populate Roles
+		userRepository.save(User("admin", "admin", mutableSetOf(Role("ROLE_ADMIN"))))
+		userRepository.save(User("user", "user", mutableSetOf(Role("ROLE_USER"))))
 	}
-
 }
 
 fun main(args: Array<String>) {
