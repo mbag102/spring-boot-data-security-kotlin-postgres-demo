@@ -1,11 +1,17 @@
-package hello
+package hello.spring
 
+import hello.spring.BasicAuthEntryPoint
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
 
 /**
  * Created by mbagliojr on 10/5/16.
@@ -16,7 +22,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 open class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Autowired
-    lateinit var userDetailsService: org.springframework.security.core.userdetails.UserDetailsService
+    lateinit var userDetailsService: UserDetailsService
 
     @Autowired
     fun configAuthentication(auth: AuthenticationManagerBuilder) {
@@ -28,12 +34,14 @@ open class SecurityConfig : WebSecurityConfigurerAdapter() {
         http.authorizeRequests()
             .antMatchers("/public").permitAll()
             .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            .permitAll()
-            .and()
-            .logout()
-            .permitAll()
+            .and().httpBasic().realmName(BasicAuthEntryPoint.REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    }
+
+
+    @Bean
+    open fun getBasicAuthEntryPoint(): BasicAuthEntryPoint {
+        return BasicAuthEntryPoint()
     }
 
 }

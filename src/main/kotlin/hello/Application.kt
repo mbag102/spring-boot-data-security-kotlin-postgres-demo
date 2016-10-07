@@ -1,6 +1,12 @@
 package hello
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import hello.model.Customer
+import hello.model.Role
+import hello.model.User
+import hello.repository.CustomerRepository
+import hello.repository.RoleRepository
+import hello.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication

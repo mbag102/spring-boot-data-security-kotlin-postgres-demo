@@ -1,7 +1,9 @@
-package hello
+package hello.spring
 
+import hello.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -10,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
  */
 
 @Service
-class UserDetailsService @Autowired constructor(val repository: UserRepository) : org.springframework.security.core.userdetails.UserDetailsService {
+class UserDetailsService @Autowired constructor(val repository: UserRepository) : UserDetailsService {
 
     @Transactional
     override fun loadUserByUsername(username: String?): UserDetails? {

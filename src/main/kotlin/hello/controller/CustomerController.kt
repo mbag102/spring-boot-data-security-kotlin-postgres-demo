@@ -1,5 +1,6 @@
-package hello
+package hello.controller
 
+import hello.repository.CustomerRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping

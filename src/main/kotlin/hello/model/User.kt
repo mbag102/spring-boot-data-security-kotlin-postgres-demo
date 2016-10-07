@@ -1,5 +1,7 @@
-package hello
+package hello.model
 
+import hello.model.Role
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 
@@ -19,6 +21,6 @@ class User(@Column(unique = true) var username: String? = "",
                  var id: Long = 0) {
 
     fun asUserDetails() : UserDetails {
-        return org.springframework.security.core.userdetails.User(username, password, authorities)
+        return User(username, password, authorities)
     }
 }
